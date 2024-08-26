@@ -5,7 +5,7 @@ const Buyer=require('../model/buyer');
 
 // Farmer signup
 exports.signupFarmer= async (req, res) => {
-    const { phoneNumber, password, name } = req.body;
+    const { phoneNumber, password, name, address, district, state, accountNo, bankName, ifsc } = req.body;
 
     try {
         const existingFarmer = await Farmer.findOne({ phoneNumber });
@@ -13,7 +13,7 @@ exports.signupFarmer= async (req, res) => {
             return res.status(400).json({ message: 'Farmer already registered with this phone number' });
         }
         const hashedPw=await bcrypt.hash(password,12);
-        const farmer =new Farmer({ phoneNumber, password:hashedPw, name });
+        const farmer =new Farmer({ phoneNumber, password:hashedPw, name, address, district, state, accountNo, bankName, ifsc });
         await farmer.save();
 
         res.status(201).json({ message: 'Farmer registered successfully' });
@@ -41,7 +41,7 @@ exports.loginFarmer=async (req, res) => {
 
 // Buyer signup
 exports.signupBuyer=async (req, res) => {
-    const { phoneNumber, password, name } = req.body;
+    const { phoneNumber, password, name, address, district, state } = req.body;
 
     try {
         const existingBuyer = await Buyer.findOne({ phoneNumber });
@@ -49,7 +49,7 @@ exports.signupBuyer=async (req, res) => {
             return res.status(400).json({ message: 'Buyer already registered with this phone number' });
         }
         const hashedPw=await bcrypt.hash(password,12);
-        const buyer = new Buyer({ phoneNumber, password:hashedPw, name });
+        const buyer = new Buyer({ phoneNumber, password:hashedPw, name, address, district, state });
         await buyer.save();
 
         res.status(201).json({ message: 'Buyer registered successfully' });
