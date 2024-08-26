@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { createPostForBidding, submitBid, viewBids } = require('../controllers/bidding');
+const { createPostForBidding, submitBid, viewBids, AllBids } = require('../controllers/bidding');
 const isauth = require('../middleware/is_auth'); 
+const upload= require('../middleware/multer');
 
-router.post('/createBid', isauth, createPostForBidding);
+router.post('/createBid', upload.array('images'), isauth, createPostForBidding);
+
+router.get('/allBids', AllBids);
 
 router.post('/submitBid', isauth, submitBid);
 
-router.post('/viewBid', isauth, viewBids);
+router.get('/viewBid/:postId', isauth, viewBids);
 
 module.exports = router;

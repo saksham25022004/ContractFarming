@@ -7,6 +7,7 @@ const cors=require('cors');
 const authRoutes=require('./routes/auth');
 const postRoutes=require('./routes/Post');
 const bidRoutes=require('./routes/bidding');
+const feedbackRoutes=require('./routes/feedback');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use((req,res,next)=>{
 app.use('/auth',authRoutes);
 app.use('/post', postRoutes);
 app.use('/bid', bidRoutes);
+app.use('/feedback',feedbackRoutes);
 
 const PORT = process.env.PORT || 2000;
 mongoose.connect(process.env.DB_URL)

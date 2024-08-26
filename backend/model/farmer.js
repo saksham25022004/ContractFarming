@@ -23,6 +23,10 @@ const farmerSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'bidding'
     }],
+    rating:{
+        type:Number,
+        default:0
+    },
 }, { timestamps: true });
 
 const Farmer = mongoose.model('Farmer', farmerSchema);

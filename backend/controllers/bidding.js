@@ -4,9 +4,10 @@ const Buyer=require('../model/buyer');
 
 // Create a new post for bidding
 exports.createPostForBidding = async (req, res) => {
-    const { cropType, price, location, landArea, images, description } = req.body;
+    const { cropType, price, location, landArea, description } = req.body;
     //const farmerId = req.userId; 
     const farmerId='66cb1bb47de6e1d78926ad08';
+    const imageUrls=req.files.map(file=>file.path);
 
     try {
         const farmer = await Farmer.findById(farmerId);
@@ -16,7 +17,7 @@ exports.createPostForBidding = async (req, res) => {
             price,
             location,
             landArea,
-            images,
+            images:imageUrls,
             description,
             farmer: farmerId,
             biddingDeadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
@@ -26,6 +27,25 @@ exports.createPostForBidding = async (req, res) => {
         farmer.bidposts.push(post._id);
         await farmer.save();
         res.status(201).json({ message: 'Post created successfully', post });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+//fetch all bids
+exports.AllBids = async (req, res) => {
+    try {
+        // Find all posts that have bids and are still open for bidding
+        const posts = await Post.find({ biddingStatus: 'open' })
+            .populate('farmer', 'name phoneNumber')
+            .populate('bids.buyer', 'name phoneNumber'); 
+
+        if (!posts || posts.length === 0) {
+            return res.status(404).json({ message: 'No posts available for bidding' });
+        }
+
+        res.status(200).json({ message: 'Bids retrieved successfully', posts });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
@@ -66,15 +86,19 @@ exports.viewBids = async (req, res) => {
     const farmerId='66cb1bb47de6e1d78926ad08';
 
     try {
-        const post = await Post.findById(postId).populate('bids.buyer').populate('farmer');
+        const post = await Post.findById(postId).populate('farmer');
 
-        if (!post || post.farmer.toString() !== farmerId) {
+        if (!post || post.farmer._id.toString() !== farmerId) {
             return res.status(404).json({ message: 'Post not found or access denied' });
         }
 
         if (post.biddingStatus === 'open' && new Date() > post.biddingDeadline) {
             post.biddingStatus = 'closed';
             await post.save();
+        }
+
+        if(!post.bids || post.bids.length==0){
+            res.status(200).json({message: 'No Buyer till Now...'})
         }
 
         const sortedBids = post.bids.sort((a, b) => b.bidAmount - a.bidAmount);
