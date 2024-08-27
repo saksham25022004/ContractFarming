@@ -5,7 +5,7 @@ const Buyer=require('../model/buyer');
 
 // Farmer signup
 exports.signupFarmer= async (req, res) => {
-    const { phoneNumber, password, name, address, district, state, accountNo, bankName, ifsc } = req.body;
+    const { phoneNumber, password, name, address, district, state } = req.body;
 
     try {
         const existingFarmer = await Farmer.findOne({ phoneNumber });
@@ -13,7 +13,7 @@ exports.signupFarmer= async (req, res) => {
             return res.status(400).json({ message: 'Farmer already registered with this phone number' });
         }
         const hashedPw=await bcrypt.hash(password,12);
-        const farmer =new Farmer({ phoneNumber, password:hashedPw, name, address, district, state, accountNo, bankName, ifsc });
+        const farmer =new Farmer({ phoneNumber, password:hashedPw, name, address, district, state });
         await farmer.save();
 
         res.status(201).json({ message: 'Farmer registered successfully' });

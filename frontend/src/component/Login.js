@@ -2,14 +2,40 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [userType, setUserType] = useState('farmer');
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate(userType === 'farmer' ? '/farmer-dashboard' : '/buyer-dashboard');
+
+        const url = userType === 'farmer' ? 'http://localhost:8080/auth/login-Farmer' : 'http://localhost:8080/auth/login-Buyer';
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ phoneNumber, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Save token to localStorage
+                localStorage.setItem('token', data.token);
+
+                // Navigate to the appropriate dashboard
+                navigate(userType === 'farmer' ? '/farmer-dashboard' : '/buyer-dashboard');
+            } else {
+                alert('Login failed. Please check your credentials and try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        }
     };
 
     return (
@@ -18,15 +44,26 @@ const Login = () => {
                 <h2 className="text-2xl font-bold mb-6 text-gray-800">Login</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                            Email
+                        <label className="block text-gray-700 mb-2">I am a:</label>
+                        <select
+                            value={userType}
+                            onChange={(e) => setUserType(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                        >
+                            <option value="farmer">Farmer</option>
+                            <option value="buyer">Buyer</option>
+                        </select>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phoneNumber">
+                            Phone Number
                         </label>
                         <input
-                            id="email"
-                            type="email"
+                            id="phoneNumber"
+                            type="text"
                             className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                             required
                         />
                     </div>
@@ -43,23 +80,12 @@ const Login = () => {
                             required
                         />
                     </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 mb-2">I am a:</label>
-                        <select
-                            value={userType}
-                            onChange={(e) => setUserType(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        >
-                            <option value="farmer">Farmer</option>
-                            <option value="buyer">Buyer</option>
-                        </select>
-                    </div>
                     <div className="flex items-center justify-between">
                         <button
                             type="submit"
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none"
                         >
-                            Login In
+                            Log In
                         </button>
                     </div>
                 </form>

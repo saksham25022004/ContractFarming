@@ -27,18 +27,6 @@ const farmerSchema = new Schema({
         type:String,
         required:true
     },
-    accountNo:{
-        type:Number,
-        required:true
-    },
-    bankName:{
-        type:String,
-        required:true
-    },
-    ifsc:{
-        type:String,
-        required:true
-    },
     posts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'PostByFarmer'

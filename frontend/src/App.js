@@ -1,22 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './component/Home';
-import Login from './component/Login';
-import Signup from './component/Signup';
-import Farmer from './component/Farmer';
-import Buyer from './component/Buyer';
+import { Provider } from 'react-redux';
+import appStore from './utils/appStore';
+import Body from './component/Body';
+
 
 const App=()=>{
   return (
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login  />} />
-          <Route path="/signup" element={<Signup  />} />
-          <Route path="/farmer-dashboard" element={ <Farmer />} />
-          <Route path="/buyer-dashboard" element={<Buyer />} />
-        </Routes>
-      </Router>
+      <div>
+        <Provider store={appStore}>
+          <Body />
+        </Provider>
+      </div>
   );
 }
 

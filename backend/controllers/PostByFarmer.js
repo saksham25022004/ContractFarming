@@ -3,8 +3,7 @@ const Farmer = require('../model/farmer');
 
 exports.createPost = async (req, res) => {
     const { cropType, price, location, landArea, description } = req.body;
-    //const farmerId = req.userId; 
-    const farmerId='66cb1bb47de6e1d78926ad08';
+    const farmerId = req.userId; 
     const imageUrls = req.files.map(file=>file.path);
 
     try {
