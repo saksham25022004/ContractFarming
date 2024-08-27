@@ -8,6 +8,7 @@ const authRoutes=require('./routes/auth');
 const postRoutes=require('./routes/Post');
 const bidRoutes=require('./routes/bidding');
 const feedbackRoutes=require('./routes/feedback');
+const governmentReserveRoutes=require('./routes/governmentReserve');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/auth',authRoutes);
 app.use('/post', postRoutes);
 app.use('/bid', bidRoutes);
 app.use('/feedback',feedbackRoutes);
+app.use('/reserve',governmentReserveRoutes);
 
 const PORT = process.env.PORT || 2000;
 mongoose.connect(process.env.DB_URL)
