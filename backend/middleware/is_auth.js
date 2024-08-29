@@ -20,7 +20,8 @@ module.exports=(req,res,next)=>{
         req.isAuth=false;
         return next();
     }
-    req.userId=decodedToken.userId;
+    req.userId=decodedToken.id;
+    //console.log(req.userId);
     req.isAuth=true;
     next();
 };

@@ -32,7 +32,7 @@ exports.loginFarmer=async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: farmer._id, role: 'farmer' }, 'techburner', { expiresIn: '1h' });
+        const token = jwt.sign({ id: farmer._id, role: 'farmer' }, 'techburner', { expiresIn: '1d' });
         res.json({ token });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
@@ -68,7 +68,7 @@ exports.loginBuyer=async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: buyer._id, role: 'buyer' }, 'techburner', { expiresIn: '1h' });
+        const token = jwt.sign({ id: buyer._id, role: 'buyer' }, 'techburner', { expiresIn: '1d' });
         res.json({ token });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });

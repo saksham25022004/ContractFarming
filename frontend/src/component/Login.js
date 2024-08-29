@@ -28,7 +28,7 @@ const Login = () => {
                 localStorage.setItem('token', data.token);
 
                 // Navigate to the appropriate dashboard
-                navigate(userType === 'farmer' ? '/farmer-dashboard' : '/buyer-dashboard');
+                navigate(userType === 'farmer' ? '/farmer-dashboard' : '/buyer-dashboard', {replace:true});
             } else {
                 alert('Login failed. Please check your credentials and try again.');
             }

@@ -49,7 +49,8 @@ const postSchema = new mongoose.Schema({
         default: 'open' },
     biddingDeadline: { 
         type: Date, 
-        required: true },
+        default: new Date( Date.now()) 
+    },
     bids: [bidSchema],
 });
 

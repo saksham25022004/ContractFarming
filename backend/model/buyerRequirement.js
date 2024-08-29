@@ -19,7 +19,7 @@ const buyerRequirementSchema = new mongoose.Schema({
         required: true
     },
     expectedPriceRange: {
-        type: String,
+        type: Number,
         required: true 
     },
     location: {

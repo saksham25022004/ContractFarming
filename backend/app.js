@@ -9,12 +9,15 @@ const postRoutes=require('./routes/Post');
 const bidRoutes=require('./routes/bidding');
 const feedbackRoutes=require('./routes/feedback');
 const governmentReserveRoutes=require('./routes/governmentReserve');
+const upload = require('./middleware/multer');
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(upload.none());
 
 app.use((req,res,next)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');

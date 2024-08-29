@@ -3,7 +3,7 @@ const Buyer = require('../model/buyer');
 
 exports.createRequirement = async (req, res) => {
     const { cropType, quantity, timeframe, expectedPriceRange, location, description } = req.body;
-    const buyerId = '66cb05dd8eeb4000b8ccf41d'; 
+    const buyerId = req.userId; 
 
     try {
         const buyer = await Buyer.findById(buyerId);
@@ -42,6 +42,26 @@ exports.getAllRequirements = async (req, res) => {
         }
 
         res.status(200).json({ message: 'Requirements retrieved successfully', requirements });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+//particular buyer requirement
+exports.getYourRequirements = async (req, res) => {
+    try {
+        const buyerId = req.userId;
+        
+        const buyer = await Buyer.findById(buyerId);
+        
+        if (!buyer) {
+            return res.status(404).json({ message: 'Buyer not found' });
+        }
+
+        const requirements = await BuyerRequirement.find({ _id: { $in: buyer.requirements } });
+
+        res.status(200).json({ message: 'Requirements fetched successfully', requirements });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });

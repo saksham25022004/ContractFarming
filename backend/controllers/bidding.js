@@ -5,8 +5,7 @@ const Buyer=require('../model/buyer');
 // Create a new post for bidding
 exports.createPostForBidding = async (req, res) => {
     const { cropType, price, location, landArea, description } = req.body;
-    //const farmerId = req.userId; 
-    const farmerId='66cb1bb47de6e1d78926ad08';
+    const farmerId = req.userId; 
     const imageUrls=req.files.map(file=>file.path);
 
     try {
@@ -36,7 +35,6 @@ exports.createPostForBidding = async (req, res) => {
 //fetch all bids
 exports.AllBids = async (req, res) => {
     try {
-        // Find all posts that have bids and are still open for bidding
         const posts = await Post.find({ biddingStatus: 'open' })
             .populate('farmer', 'name phoneNumber')
             .populate('bids.buyer', 'name phoneNumber'); 
@@ -55,8 +53,7 @@ exports.AllBids = async (req, res) => {
 // Buyer submits a bid
 exports.submitBid = async (req, res) => {
     const { postId, bidAmount } = req.body;
-    //const buyerId = req.userId;
-    const buyerId='66cb05dd8eeb4000b8ccf41d';
+    const buyerId = req.userId;
 
     try {
         const post = await Post.findById(postId);
@@ -82,12 +79,11 @@ exports.submitBid = async (req, res) => {
 // View bids after bidding is closed
 exports.viewBids = async (req, res) => {
     const { postId } = req.params;
-    //const farmerId = req.userId;
-    const farmerId='66cb1bb47de6e1d78926ad08';
+    const farmerId = req.userId;
 
     try {
-        const post = await Post.findById(postId).populate('farmer');
-
+        const post = await Post.findById(postId);
+        console.log(post);
         if (!post || post.farmer._id.toString() !== farmerId) {
             return res.status(404).json({ message: 'Post not found or access denied' });
         }
@@ -98,13 +94,37 @@ exports.viewBids = async (req, res) => {
         }
 
         if(!post.bids || post.bids.length==0){
-            res.status(200).json({message: 'No Buyer till Now...'})
+            return res.status(200).json({message: 'No Buyer till Now...'})
         }
 
         const sortedBids = post.bids.sort((a, b) => b.bidAmount - a.bidAmount);
         res.status(200).json({ message: 'Bids retrieved successfully', bids: sortedBids });
     } catch (err) {
         console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+//get paricular bids 
+exports.yourBids = async (req, res) => {
+    const farmerId = req.userId;
+
+    if (!farmerId) {
+        return res.status(400).json({ message: 'User ID is missing' });
+    }
+
+    try {
+        const farmer = await Farmer.findById(farmerId);
+        
+        if (!farmer) {
+            return res.status(404).json({ message: 'Farmer not found' });
+        }
+
+        const bids = await Post.find({ farmer: farmerId });
+
+        res.status(200).json({ bids });
+    } catch (err) {
+        console.error('Error fetching bids:', err);
         res.status(500).json({ message: 'Server error' });
     }
 };

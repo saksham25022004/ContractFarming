@@ -73,8 +73,7 @@ exports.getSinglePost = async (req, res) => {
 // Delete a post by its ID
 exports.deletePost = async (req, res) => {
     const postId = req.params.postId;  
-    //const farmerId = req.userId; 
-    const farmerId='66cb1bb47de6e1d78926ad08';
+    const farmerId = req.userId; 
 
     try {
         const post = await Post.findById(postId);
@@ -88,6 +87,10 @@ exports.deletePost = async (req, res) => {
         }
 
         await Post.findByIdAndDelete(postId);
+
+        await Farmer.findByIdAndUpdate(farmerId, {
+            $pull: { posts: postId }
+        });
 
         res.status(200).json({ message: 'Post deleted successfully' });
     } catch (err) {
@@ -107,6 +110,26 @@ exports.searchByCrop = async (req, res) => {
         }
 
         res.status(200).json(posts);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+//get particular farmer crops
+exports.yourCrop = async (req, res) => {
+    const farmerId = req.userId;
+
+    try {
+        const farmer = await Farmer.findById(farmerId).populate('posts'); 
+
+        if (!farmer) {
+            return res.status(404).json({ message: 'Farmer not found' });
+        }
+
+        const cropPosts = await Post.find({ farmer: farmerId });
+
+        res.status(200).json({ message: 'Farmer crop posts fetched successfully', cropPosts });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });

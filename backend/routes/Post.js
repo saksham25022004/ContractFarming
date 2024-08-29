@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { createPost, getAllPosts, getSinglePost, deletePost, searchByCrop } = require('../controllers/PostByFarmer');
-const { createRequirement, getAllRequirements }=require('../controllers/PostByBuyer');
+const { createPost, getAllPosts, getSinglePost, deletePost, searchByCrop, yourCrop } = require('../controllers/PostByFarmer');
+const { createRequirement, getAllRequirements, getYourRequirements }=require('../controllers/PostByBuyer');
 const isauth = require('../middleware/is_auth'); 
 const upload= require('../middleware/multer');
 
@@ -15,8 +15,12 @@ router.delete('/posts/:postId', isauth, deletePost);
 
 router.get('/searchByCrop', searchByCrop);
 
+router.get('/yourCrop',isauth, yourCrop);
+
 router.post('/postByBuyer', isauth, createRequirement);
 
 router.get('/allRequirements', getAllRequirements);
+
+router.get('/yourRequirement', isauth, getYourRequirements);
 
 module.exports = router;

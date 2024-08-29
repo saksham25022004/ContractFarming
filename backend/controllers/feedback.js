@@ -3,8 +3,7 @@ const Farmer = require('../model/farmer');
 
 exports.submitFeedback = async (req, res) => {
     const { farmerId, rating, comment } = req.body;
-    //const buyerId = req.userId;
-    const buyerId='66cb05dd8eeb4000b8ccf41d';
+    const buyerId = req.userId;
 
     try {
         const feedback = new Feedback({
