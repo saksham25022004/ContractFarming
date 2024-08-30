@@ -6,7 +6,6 @@ import AddRequirementsComponent from './AddRequirement';
 import ProfileComponent from './Profile';
 import { useNavigate } from 'react-router-dom';
 
-
 const FarmerDashboard = () => {
     const [activeComponent, setActiveComponent] = useState('cropPosts');
     const navigate = useNavigate();
@@ -15,56 +14,82 @@ const FarmerDashboard = () => {
         const token = localStorage.getItem('token');
         return !!token;
     };
-      
+
     useEffect(() => {
-        if (!isAuthenticated) {
-          navigate('/login', { replace: true });
+        if (!isAuthenticated()) {
+            navigate('/login', { replace: true });
         }
-      }, [navigate]);
+    }, [navigate]);
 
     const handleLogout = () => {
-      localStorage.removeItem('token');
-      navigate('/',{replace:true});
-  };
+        localStorage.removeItem('token');
+        navigate('/', { replace: true });
+    };
 
     const renderComponent = () => {
         switch (activeComponent) {
             case 'cropPosts':
-                return <CropPostsComponent  />;
+                return <CropPostsComponent />;
             case 'bids':
                 return <BidsComponent />;
             case 'requirements':
                 return <RequirementsComponent />;
             case 'addRequirement':
-                return <AddRequirementsComponent />
+                return <AddRequirementsComponent />;
             case 'profile':
-                return <ProfileComponent />
+                return <ProfileComponent />;
             default:
-                return <CropPostsComponent  />;
+                return <CropPostsComponent />;
         }
     };
 
     return (
-        <div>
-            <header className="flex items-center justify-between p-4 bg-gray-800 text-white sticky top-0 z-10">
+        <div className="bg-green-100 min-h-screen flex flex-col">
+            <header className="flex items-center justify-between p-4 bg-green-800 text-white sticky top-0 z-10 shadow-md">
                 <div className="text-xl font-bold">Buyer</div>
-                    <nav className="space-x-4">
-                        <button onClick={() => setActiveComponent('cropPosts')} className="hover:text-gray-400">All Crops</button>
-                        <button onClick={() => setActiveComponent('bids')} className="hover:text-gray-400">Bidding</button>
-                        <button onClick={() => setActiveComponent('requirements')} className="hover:text-gray-400">Your Requirements</button>
-                        <button onClick={() => setActiveComponent('addRequirement')} className="hover:text-gray-400">Add Requirements</button>
-                    </nav>
-                    <div className="flex items-center space-x-2">
-                    <button className="w-8 h-8 rounded-full bg-gray-500" onClick={() => setActiveComponent('profile')}></button>
+                <nav className="flex space-x-12">
+                    <button
+                        onClick={() => setActiveComponent('cropPosts')}
+                        className={`hover:text-green-200 transition-colors ${activeComponent === 'cropPosts' ? 'border-b-2 border-white' : ''}`}
+                    >
+                        All Crops
+                    </button>
+                    <button
+                        onClick={() => setActiveComponent('bids')}
+                        className={`hover:text-green-200 transition-colors ${activeComponent === 'bids' ? 'border-b-2 border-white' : ''}`}
+                    >
+                        Bidding
+                    </button>
+                    <button
+                        onClick={() => setActiveComponent('requirements')}
+                        className={`hover:text-green-200 transition-colors ${activeComponent === 'requirements' ? 'border-b-2 border-white' : ''}`}
+                    >
+                        Your Requirements
+                    </button>
+                    <button
+                        onClick={() => setActiveComponent('addRequirement')}
+                        className={`hover:text-green-200 transition-colors ${activeComponent === 'addRequirement' ? 'border-b-2 border-white' : ''}`}
+                    >
+                        Add Requirements
+                    </button>
+                </nav>
+                <div className="flex items-center space-x-2">
                     <button 
-                        onClick={handleLogout} 
-                        className="bg-red-600 px-3 py-1 rounded hover:bg-red-700"
+                        className="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white hover:bg-green-500"
+                        onClick={() => setActiveComponent('profile')}
+                    >
+                        {/* Profile icon */}
+                        P
+                    </button>
+                    <button
+                        onClick={handleLogout}
+                        className="bg-red-600 px-3 py-1 rounded hover:bg-red-700 transition-colors"
                     >
                         Logout
                     </button>
                 </div>
             </header>
-            <main className="p-4">
+            <main className="flex-1 p-4 bg-green-50">
                 {renderComponent()}
             </main>
         </div>
