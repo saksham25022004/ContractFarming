@@ -1,14 +1,12 @@
-import React from 'react'
+import React from 'react';
 import useAllRequirements from '../hooks/useAllRequirements';
 import { useSelector } from 'react-redux';
 
 const AllRequirements = () => {
-
   useAllRequirements();
 
-  const requirements=useSelector(store=>store.farmer.allRequirements);
-
-  const allRequirements=requirements?.requirements;
+  const requirements = useSelector(store => store.farmer.allRequirements);
+  const allRequirements = requirements?.requirements;
 
   return (
     <div className="p-4">
@@ -19,7 +17,7 @@ const AllRequirements = () => {
                     <div key={index} className="bg-white shadow-md rounded-lg p-4 mb-4 w-[50%]">
                         <h3 className="text-lg font-bold mb-2">{requirement.cropType}</h3>
                         <p className="text-gray-700"><strong>Quantity:</strong> {requirement.quantity}</p>
-                        <p className="text-gray-700"><strong>Expected Time:</strong> {requirement.timeframe}</p>
+                        <p className="text-gray-700"><strong>Timeframe:</strong> {requirement.timeframe}</p>
                         <p className="text-gray-700"><strong>Expected Price Range:</strong> {requirement.expectedPriceRange}</p>
                         <p className="text-gray-700"><strong>Buyer:</strong> {requirement.Buyer}</p>
                         <p className="text-gray-700"><strong>Location:</strong> {requirement.location}</p>
@@ -39,7 +37,7 @@ const AllRequirements = () => {
             )}
         </div>
     </div>
-  )
+  );
 }
 
 export default AllRequirements;
