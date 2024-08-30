@@ -101,7 +101,7 @@ exports.deletePost = async (req, res) => {
 
 // Search for posts by crop type
 exports.searchByCrop = async (req, res) => {
-    const { cropType } = req.query;
+    const { cropType } = req.params;
 
     try {
         const posts = await Post.find({ cropType: { $regex: cropType, $options: 'i' } });

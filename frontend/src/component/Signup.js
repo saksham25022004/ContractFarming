@@ -41,7 +41,7 @@ const SignUp = () => {
             });
 
             if (response.ok) {
-                navigate(userType === 'farmer' ? '/farmer-dashboard' : '/buyer-dashboard');
+                navigate('/');
             } else {
                 const errorData = await response.json();
                 console.error('Signup failed:', errorData.message);

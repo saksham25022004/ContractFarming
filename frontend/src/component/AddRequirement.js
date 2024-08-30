@@ -89,7 +89,7 @@ return (
           />
       </div>
       <div className="mb-4">
-          <label className="block text-gray-700">In time</label>
+          <label className="block text-gray-700">Expected Time</label>
           <input 
               type="text"
               value={timeframe}

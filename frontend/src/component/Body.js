@@ -5,6 +5,7 @@ import Login from './Login';
 import Signup from './Signup';
 import Farmer from './Farmer';
 import Buyer from './Buyer';
+import SearchCrops from './SearchCrops';
 
 const Body = () => {
   return (
@@ -16,6 +17,7 @@ const Body = () => {
           <Route path="/signup" element={<Signup  />} />
           <Route path="/farmer-dashboard" element={ <Farmer />} />
           <Route path="/buyer-dashboard" element={<Buyer />} />
+          <Route path="/search-crops" element={<SearchCrops />} />
         </Routes>
       </Router>
     </div>

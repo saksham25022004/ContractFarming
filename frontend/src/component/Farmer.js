@@ -25,6 +25,7 @@ const FarmerDashboard = () => {
 
     const handleLogout = () => {
       localStorage.removeItem('token');
+      window.location.href='/';
       navigate('/', {replace:true});
     };
 

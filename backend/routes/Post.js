@@ -13,7 +13,7 @@ router.get('/post/:postId', getSinglePost);
 
 router.delete('/posts/:postId', isauth, deletePost);
 
-router.get('/searchByCrop', searchByCrop);
+router.get('/searchByCrop/:cropType', searchByCrop);
 
 router.get('/yourCrop',isauth, yourCrop);
 
