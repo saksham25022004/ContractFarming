@@ -1,16 +1,64 @@
 import React, { useState } from 'react';
-
 const CropDetails = ({ crop, onSubmitFeedback }) => {
     const [rating, setRating] = useState('');
     const [comment, setComment] = useState('');
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmitFeedback(crop.farmer._id, rating, comment);
+        //onSubmitFeedback(crop.farmer._id, rating, comment);
+        alert("Feedback Submitted")
         setRating('');
         setComment('');
     };
+    const [payment, setPayment] = useState(false);
+    function sPayment(){
+        setPayment(true);
+    }
 
+    const handler = async () => {
+        const data = {
+            "farmerName": crop.farmerName,
+            "farmerAddress": crop.location,
+            "farmerContact": crop.phoneNumber, 
+            "date": new Date(Date.now()).toLocaleDateString(),
+            "cropType": crop.cropType,
+            "quality": "Good",
+            "price": crop.price,
+            "deliveryDate": new Date(Date.now()).toLocaleDateString(),
+            "farmerSignature": crop.farmerName,
+            "buyerSignature": "I am Buyer",
+            "buyerName": "I am Buyer",
+            "buyerAddress": "Buyer Address",
+            "buyerContact": "Buyer Contact"
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/generate-pdf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'document.pdf');
+                document.body.appendChild(link);
+                link.click();
+                link.parentNode.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            } else {
+                console.error('Error generating PDF:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+  
     return (
         <div className="p-6 bg-green-50 rounded-lg shadow-lg">
             <div className="flex flex-col lg:flex-row mb-6">
@@ -67,7 +115,7 @@ const CropDetails = ({ crop, onSubmitFeedback }) => {
                 <h3 className="text-2xl font-semibold text-green-800 mb-4">Images</h3>
                 <div className="flex space-x-2 mb-4">
                     {crop.images && crop.images.map((image, index) => (
-                        <img 
+                        <img
                             key={index}
                             src={image}
                             alt={crop.cropType}
@@ -81,9 +129,12 @@ const CropDetails = ({ crop, onSubmitFeedback }) => {
                     <p className="text-lg mb-4 text-green-700">
                         Please contact the farmer directly to arrange payment. Ensure that all transactions are secured and confirmed by both parties.
                     </p>
-                    <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors" onClick={sPayment}>
                         Proceed to Payment
                     </button>
+                    {
+                        payment?<button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors ml-7" onClick={handler}>Download Contract</button>:<></>
+                    }
                 </div>
             </div>
         </div>
@@ -91,9 +142,3 @@ const CropDetails = ({ crop, onSubmitFeedback }) => {
 }
 
 export default CropDetails;
-
-
-
-
-
-

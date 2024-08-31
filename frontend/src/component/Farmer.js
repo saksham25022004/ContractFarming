@@ -24,14 +24,9 @@ const FarmerDashboard = () => {
     }, [navigate]);
 
     const handleLogout = () => {
-<<<<<<< HEAD
+
       localStorage.removeItem('token');
-      window.location.href='/';
       navigate('/', {replace:true});
-=======
-        localStorage.removeItem('token');
-        navigate('/', { replace: true });
->>>>>>> ae973c2a5c0b11a5b575f8f40beb1e93efc6828d
     };
 
     const renderComponent = () => {
@@ -58,7 +53,10 @@ const FarmerDashboard = () => {
     return (
         <div className="bg-green-50 min-h-screen">
             <header className="flex items-center justify-between p-4 bg-green-700 text-white sticky top-0 z-10">
-                <div className="text-xl font-bold">Farmer</div>
+                <div className='flex'>
+                    <img src='https://res.cloudinary.com/dkwurpttz/image/upload/v1725056080/images/eeuudgyjnamy4kkhuox1.jpg' alt='logo' className='w-7' />
+                    <div className="text-xl font-bold ml-2">KrishiMitr</div>
+                </div>
                 <nav className="flex space-x-12">
                     <button 
                         onClick={() => setActiveComponent('cropPosts')} 

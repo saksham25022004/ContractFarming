@@ -46,7 +46,10 @@ const FarmerDashboard = () => {
     return (
         <div className="bg-green-100 min-h-screen flex flex-col">
             <header className="flex items-center justify-between p-4 bg-green-800 text-white sticky top-0 z-10 shadow-md">
-                <div className="text-xl font-bold">Buyer</div>
+                <div className='flex'>
+                    <img src='https://res.cloudinary.com/dkwurpttz/image/upload/v1725056080/images/eeuudgyjnamy4kkhuox1.jpg' alt='logo' className='w-7' />
+                    <div className="text-xl font-bold ml-2">KrishiMitr</div>
+                </div>
                 <nav className="flex space-x-12">
                     <button
                         onClick={() => setActiveComponent('cropPosts')}
